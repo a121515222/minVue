@@ -1,4 +1,4 @@
-import { effect } from "../reactivity/effect";
+import { effect, stop } from "../reactivity/effect";
 import { reactive } from "../reactivity/reactive";
 
 describe("effect", () => {
@@ -16,7 +16,7 @@ describe("effect", () => {
     user.age++;
     expect(nextAge).toBe(12);
   });
-  it("should return runner when call effect",()=>{
+  it("should return runner when call effect",() => {
     let foo = 10;
     const runner = effect(()=>{
       foo ++
@@ -34,7 +34,7 @@ describe("effect", () => {
     //如果當執行runner時會再次執行fn
     let dummy;
     let run: any;
-    const scheduler = jest.fn(()=>{
+    const scheduler = jest.fn(() => {
       run = runner;
     });
     const obj = reactive({ foo:1 });
@@ -50,5 +50,34 @@ describe("effect", () => {
     expect(dummy).toBe(1);
     run();
     expect(dummy).toBe(2);
-  })
+  });
+  it("stop",()=>{
+    let dummy;
+    const obj = reactive({ prop: 1 });
+    const runner = effect(() => {
+      dummy = obj.prop;
+    });
+    obj.prop = 2;
+    expect(dummy).toBe(2);
+    stop(runner);
+    obj.prop = 3;
+    expect(dummy).toBe(2);
+    runner();
+    expect(dummy).toBe(3);
+  });
+  it("onStop",()=>{
+    const obj = reactive({ foo: 1 });
+    const onStop  = jest.fn();
+  let dummy;
+  const runner = effect(() => {
+    dummy = obj.foo;
+  },
+  { 
+    onStop,
+  }
+  );
+  stop(runner);
+  expect(onStop).toBeCalledTimes(1);
+  });
+  
 });
