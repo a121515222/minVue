@@ -1,25 +1,24 @@
-
-class ReactiveEffect{
-  private _fn:any
+class ReactiveEffect {
+  private _fn: any;
   constructor(fn) {
-    this._fn=fn;
+    this._fn = fn;
   }
-  run(){
+  run() {
     activeEffect = this;
-    this._fn();
+    return this._fn();
   }
 }
 const targetMap = new Map();
-export function track(target,key) {
+export function track(target, key) {
   let depsMap = targetMap.get(target);
-  if(!depsMap){
+  if (!depsMap) {
     depsMap = new Map();
-    targetMap.set(target,depsMap);
+    targetMap.set(target, depsMap);
   }
   let dep = depsMap.get(key);
-  if(!dep){
+  if (!dep) {
     dep = new Set();
-    depsMap.set(key,dep);
+    depsMap.set(key, dep);
   }
   dep.add(activeEffect);
 }
@@ -32,7 +31,8 @@ export function trigger(target, key) {
 }
 
 let activeEffect;
-export function effect (fn) {
-  const _effect= new ReactiveEffect(fn);
+export function effect(fn) {
+  const _effect = new ReactiveEffect(fn);
   _effect.run();
+  return _effect.run.bind(_effect);
 }
