@@ -15,6 +15,6 @@ function createReactiveObject(raw, baseHandler) {
   return new Proxy(raw, baseHandler)
 }
 export function isReactive(value){
-  return value[ReactiveFlags.IS_REACTIVE]
+  return !!value[ReactiveFlags.IS_REACTIVE]
 }
 
