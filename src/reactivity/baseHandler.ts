@@ -9,6 +9,8 @@ function createGetter(isReadonly = false) {
     const res = Reflect.get(target, key);
     if(key === ReactiveFlags.IS_REACTIVE) {
       return !isReadonly; 
+    } else if(key === ReactiveFlags.IS_READONLY) {
+      return isReadonly;
     }
     // 依賴收集
     if(!isReadonly) {
