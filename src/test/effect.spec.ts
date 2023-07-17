@@ -16,18 +16,18 @@ describe("effect", () => {
     user.age++;
     expect(nextAge).toBe(12);
   });
-  it("should return runner when call effect",() => {
+  it("should return runner when call effect", () => {
     let foo = 10;
-    const runner = effect(()=>{
-      foo ++
-      return foo
+    const runner = effect(() => {
+      foo++;
+      return foo;
     });
     expect(foo).toBe(11);
     const r = runner();
     expect(foo).toBe(12);
     expect(r).toBe(foo);
   });
-  it("scheduler",()=>{
+  it("scheduler", () => {
     //通過effect的第二個參數給定一個scheduler
     //effect第一次執行的時候會執行fn
     //當響應式對象set update不會執行fn 而是執行scheduler
@@ -37,11 +37,12 @@ describe("effect", () => {
     const scheduler = jest.fn(() => {
       run = runner;
     });
-    const obj = reactive({ foo:1 });
+    const obj = reactive({ foo: 1 });
     const runner = effect(
-     ()=>{
-      dummy = obj.foo;
-     },{ scheduler } 
+      () => {
+        dummy = obj.foo;
+      },
+      { scheduler }
     );
     expect(scheduler).not.toHaveBeenCalled();
     expect(dummy).toBe(1);
@@ -51,7 +52,7 @@ describe("effect", () => {
     run();
     expect(dummy).toBe(2);
   });
-  it("stop",()=>{
+  it("stop", () => {
     let dummy;
     const obj = reactive({ prop: 1 });
     const runner = effect(() => {
@@ -60,24 +61,25 @@ describe("effect", () => {
     obj.prop = 2;
     expect(dummy).toBe(2);
     stop(runner);
-    obj.prop = 3;
+    // obj.prop = 3;
+    obj.prop++;
     expect(dummy).toBe(2);
     runner();
     expect(dummy).toBe(3);
   });
-  it("onStop",()=>{
+  it("onStop", () => {
     const obj = reactive({ foo: 1 });
-    const onStop  = jest.fn();
-  let dummy;
-  const runner = effect(() => {
-    dummy = obj.foo;
-  },
-  { 
-    onStop,
-  }
-  );
-  stop(runner);
-  expect(onStop).toBeCalledTimes(1);
+    const onStop = jest.fn();
+    let dummy;
+    const runner = effect(
+      () => {
+        dummy = obj.foo;
+      },
+      {
+        onStop,
+      }
+    );
+    stop(runner);
+    expect(onStop).toBeCalledTimes(1);
   });
-  
 });
