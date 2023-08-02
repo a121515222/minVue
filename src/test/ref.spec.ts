@@ -34,9 +34,9 @@ describe("ref", () => {
     let dummy;
     effect(() => {
       dummy = a.value.count;
-      expect(dummy).toBe(1);
-      a.value.count = 2;
-      expect(dummy).toBe(2);
     });
+    expect(dummy).toBe(1);
+    a.value.count = 2;
+    expect(dummy).toBe(2);
   });
 });
