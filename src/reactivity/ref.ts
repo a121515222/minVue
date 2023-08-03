@@ -7,6 +7,7 @@ class RefImpl {
   private _value: any;
   public dep;
   private _rawValue;
+  public __v_isRef = true;
   constructor(value) {
     this._rawValue = value;
     this._value = convert(value);
@@ -35,4 +36,12 @@ function trackRefValue(ref) {
 
 export function ref(value) {
   return new RefImpl(value);
+}
+
+export function isRef(ref) {
+  // 因為不是ref的時候ref.__v_isRef為undefined所以要加上!!轉成boolean
+  return !!ref.__v_isRef;
+}
+export function unRef(ref) {
+  return isRef(ref) ? ref.value : ref;
 }
