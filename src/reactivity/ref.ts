@@ -52,8 +52,10 @@ export function proxyRefs(objectWithRefs) {
       return unRef(Reflect.get(target, key));
     },
     set(target, key, value) {
+      // 當target為ref時且寫入的proxyRefs的值不是ref時直接取代原本的值
       if (isRef(target[key]) && !isRef(value)) {
         return (target[key].value = value);
+        // 如果寫入的值是ref則return所寫入的ref
       } else {
         return Reflect.set(target, key, value);
       }

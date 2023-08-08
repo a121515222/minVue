@@ -1,13 +1,14 @@
 import { extend } from "../shared";
 let activeEffect;
 let shouldTrack;
-class ReactiveEffect {
+export class ReactiveEffect {
   private _fn: any;
   deps = [];
   active = true;
   onStop?: () => void;
-  constructor(fn, public scheduler?) {
+  constructor(fn, public scheduler?: Function) {
     this._fn = fn;
+    this.scheduler = scheduler;
   }
   run() {
     activeEffect = this;
