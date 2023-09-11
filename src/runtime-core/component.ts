@@ -19,23 +19,7 @@ function setupStatefulComponent(instance: any) {
   // 使用proxy是為了能讓使用者能直接使用this.$el取得值
   //初始化 空的object為 context
   //get的target就是 context, key對應到 demo中的 this.msg 在App.js
-  instance.proxy = new Proxy(
-    {},
-    {
-      get(target, key) {
-        //從setupState獲取值
-
-        const { setupState } = instance;
-        if (key in setupState) {
-          return setupState[key];
-        }
-        if (key === "$el") {
-          // 這裡的虛擬節點是屬於component的,不是createElement的
-          return instance.vnode.el;
-        }
-      },
-    }
-  );
+  instance.proxy = new Proxy({ _: instaance }, PublicInstanceProxyHandlers);
 
   const { setup } = Component;
   if (setup) {
