@@ -29,6 +29,10 @@ function setupStatefulComponent(instance: any) {
         if (key in setupState) {
           return setupState[key];
         }
+        if (key === "$el") {
+          // 這裡的虛擬節點是屬於component的,不是createElement的
+          return instance.vnode.el;
+        }
       },
     }
   );

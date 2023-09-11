@@ -21,7 +21,9 @@ function processElement(vnode: any, container: any) {
 }
 
 function mountElement(vnode: any, container: any) {
-  const el = document.createElement(vnode.type);
+  // 把所創造了element存在vnode內
+  // 這裡的vnode是屬於App.js 中h函式內的"div"
+  const el = (vnode.el = document.createElement(vnode.type));
 
   // 收到vnode是 string or array
   const { children } = vnode;
@@ -52,13 +54,15 @@ function processComponent(vnode: any, container: any): void {
 function mountComponent(vnode: any, container) {
   const instance = createComponentInstance(vnode);
   setupComponent(instance);
-  setupRenderEffect(instance, container);
+  setupRenderEffect(instance, vnode, container);
 }
-function setupRenderEffect(instance: any, container) {
+function setupRenderEffect(instance: any, vnode, container) {
   // 下面兩行看不懂為甚麼render.call(proxy)
   const { proxy } = instance;
   const subTree = instance.render.call(proxy);
   // 在 path中
   // vnode 為element > mounted element
   patch(subTree, container);
+  //當所有element都已經mounted的時候,把subTree的元素賦值給Component的虛擬節點
+  vnode.el = subTree.el;
 }
