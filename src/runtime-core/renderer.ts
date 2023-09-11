@@ -51,12 +51,12 @@ function processComponent(vnode: any, container: any): void {
   mountComponent(vnode, container);
 }
 
-function mountComponent(vnode: any, container) {
-  const instance = createComponentInstance(vnode);
+function mountComponent(initVnode: any, container) {
+  const instance = createComponentInstance(initVnode);
   setupComponent(instance);
-  setupRenderEffect(instance, vnode, container);
+  setupRenderEffect(instance, initVnode, container);
 }
-function setupRenderEffect(instance: any, vnode, container) {
+function setupRenderEffect(instance: any, initVnode, container) {
   // 下面兩行看不懂為甚麼render.call(proxy)
   const { proxy } = instance;
   const subTree = instance.render.call(proxy);
@@ -64,5 +64,5 @@ function setupRenderEffect(instance: any, vnode, container) {
   // vnode 為element > mounted element
   patch(subTree, container);
   //當所有element都已經mounted的時候,把subTree的元素賦值給Component的虛擬節點
-  vnode.el = subTree.el;
+  initVnode.el = subTree.el;
 }
