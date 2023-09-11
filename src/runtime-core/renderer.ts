@@ -9,7 +9,6 @@ function patch(vnode, container) {
   //判斷是不是element
   // to do 判斷vnode是不是element
   // processElement
-  console.log(typeof vnode);
   if (typeof vnode.type === "string") {
     processElement(vnode, container);
   } else if (isObject(vnode.type)) {
@@ -56,7 +55,9 @@ function mountComponent(vnode: any, container) {
   setupRenderEffect(instance, container);
 }
 function setupRenderEffect(instance: any, container) {
-  const subTree = instance.render();
+  // 下面兩行看不懂為甚麼render.call(proxy)
+  const { proxy } = instance;
+  const subTree = instance.render.call(proxy);
   // 在 path中
   // vnode 為element > mounted element
   patch(subTree, container);
