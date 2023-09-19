@@ -1,3 +1,5 @@
+import { PublicInstanceProxyHandlers } from "./componentPublicInstance";
+
 export function createComponentInstance(vnode: any) {
   const component = {
     vnode,
@@ -19,7 +21,7 @@ function setupStatefulComponent(instance: any) {
   // 使用proxy是為了能讓使用者能直接使用this.$el取得值
   //初始化 空的object為 context
   //get的target就是 context, key對應到 demo中的 this.msg 在App.js
-  instance.proxy = new Proxy({ _: instaance }, PublicInstanceProxyHandlers);
+  instance.proxy = new Proxy({ _: instance }, PublicInstanceProxyHandlers);
 
   const { setup } = Component;
   if (setup) {
