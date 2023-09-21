@@ -36,9 +36,17 @@ function mountElement(vnode: any, container: any) {
   }
 
   // props
+
   const { props } = vnode;
   for (const key in props) {
     const val = props[key];
+
+    // 檢查key中有沒有註冊事件
+    const isOn = (key: string) => /^on[A-Z]/.test(key);
+    if (isOn(key)) {
+      const event = key.slice(2).toLocaleLowerCase();
+      el.addEventListener(event, val);
+    }
     el.setAttribute(key, val);
   }
   container.append(el);
