@@ -5,15 +5,15 @@ export function createVNode(type, props?, children?) {
     type,
     props,
     children,
-    shapeFlags: getShapeFlag(type),
+    shapeFlag: getShapeFlag(type),
     // 初始化虛擬el設定為null
     el: null,
   };
   // 處理children
   if (typeof children === "string") {
-    vnode.shapeFlags |= ShapeFlags.TEXT_CHILDREN;
+    vnode.shapeFlag |= ShapeFlags.TEXT_CHILDREN;
   } else if (Array.isArray(children)) {
-    vnode.shapeFlags |= ShapeFlags.ARRAY_CHILDREN;
+    vnode.shapeFlag |= ShapeFlags.ARRAY_CHILDREN;
   }
   return vnode;
 }

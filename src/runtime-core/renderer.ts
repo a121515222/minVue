@@ -6,14 +6,14 @@ export function render(vnode, container) {
   patch(vnode, container);
 }
 function patch(vnode, container) {
-  const { shapeFlags } = vnode;
+  const { shapeFlag } = vnode;
   // 處理component
   //判斷是不是element
   // to do 判斷vnode是不是element
   // processElement
-  if (shapeFlags & ShapeFlags.ELEMENT) {
+  if (shapeFlag & ShapeFlags.ELEMENT) {
     processElement(vnode, container);
-  } else if (shapeFlags & ShapeFlags.STATEFUL_COMPONENT) {
+  } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
     processComponent(vnode, container);
   }
 }
@@ -28,10 +28,10 @@ function mountElement(vnode: any, container: any) {
   const el = (vnode.el = document.createElement(vnode.type));
 
   // 收到vnode是 string or array
-  const { children, shapeFlags } = vnode;
-  if (shapeFlags & ShapeFlags.TEXT_CHILDREN) {
+  const { children, shapeFlag } = vnode;
+  if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
     el.textContent = children;
-  } else if (shapeFlags & ShapeFlags.ARRAY_CHILDREN) {
+  } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
     mountChildren(vnode, el);
   }
 
