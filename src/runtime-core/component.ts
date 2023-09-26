@@ -1,4 +1,5 @@
 import { shallowReadonly } from "../reactivity/reactive";
+import { emit } from "./componentEmit";
 import { initProps } from "./componentProps";
 import { PublicInstanceProxyHandlers } from "./componentPublicInstance";
 
@@ -8,7 +9,18 @@ export function createComponentInstance(vnode: any) {
     type: vnode.type,
     setupState: {},
     props: {},
+    emit: () => {},
   };
+  // 為了使用者能夠直接傳入event不用傳入整個instance
+  //有了emit.bind(null, component)相當於emit固定綁定了component
+  //所以在componentEmit內的emit(instance,event)看起來是這樣子的emit(component,event)第一個的參數已經被綁成component了，
+  //所以在一半情況下使用emit("XXX"),XXX都為第二的參數event,可以參考下面的例子
+  //function add(a, b) {
+  //   return a + b;
+  // }
+  // const addFive = add.bind(null, "5") ;
+  //console.log(addFive(3)) ////"53"
+  component.emit = emit.bind(null, component) as any;
   return component;
 }
 
@@ -31,7 +43,9 @@ function setupStatefulComponent(instance: any) {
   if (setup) {
     // setup可以return function 即為render函式
     // 如果return object即會把object注入至component內
-    const setupResult = setup(shallowReadonly(instance.props));
+    const setupResult = setup(shallowReadonly(instance.props), {
+      emit: instance.emit,
+    });
     handleSetupResult(instance, setupResult);
   }
 }
