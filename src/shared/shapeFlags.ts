@@ -4,4 +4,5 @@ export const enum ShapeFlags {
 
   TEXT_CHILDREN = 1 << 2, //0100
   ARRAY_CHILDREN = 1 << 3, // 1000
+  SLOT_CHILDREN = 1 << 4,
 }
