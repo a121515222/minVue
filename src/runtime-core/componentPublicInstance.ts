@@ -10,10 +10,6 @@ export const PublicInstanceProxyHandlers = {
     //從setupState獲取值
 
     const { setupState, props } = instance;
-    // 怎麼多了下面
-    // if (key in setupState) {
-    //   return setupState[key];
-    // }
 
     if (hasOwn(setupState, key)) {
       return setupState[key];
