@@ -44,11 +44,13 @@ function setupStatefulComponent(instance: any) {
 
   const { setup } = Component;
   if (setup) {
+    currentInstance = instance;
     // setup可以return function 即為render函式
     // 如果return object即會把object注入至component內
     const setupResult = setup(shallowReadonly(instance.props), {
       emit: instance.emit,
     });
+    currentInstance = null;
     handleSetupResult(instance, setupResult);
   }
 }
@@ -67,4 +69,10 @@ function finishComponentSetup(instance: any) {
   //   instance.render = Component.render;
   // }
   instance.render = Component.render;
+}
+
+let currentInstance = null;
+
+export function getCurrentInstance() {
+  return currentInstance;
 }
