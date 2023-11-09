@@ -1,16 +1,19 @@
-import { shallowReadonly } from "../reactivity/reactive";
-import { emit } from "./componentEmit";
-import { initProps } from "./componentProps";
-import { PublicInstanceProxyHandlers } from "./componentPublicInstance";
-import { initSlots } from "./componentSlots";
+import { shallowReadonly } from "../../reactivity/reactive";
+import { emit } from "../componentEmit";
+import { initProps } from "../componentProps";
+import { PublicInstanceProxyHandlers } from "../componentPublicInstance";
+import { initSlots } from "../componentSlots";
 
-export function createComponentInstance(vnode: any) {
+export function createComponentInstance(vnode: any, parent) {
+  console.log("createComponentInstance", parent);
   const component = {
     vnode,
     type: vnode.type,
     setupState: {},
     props: {},
     slots: {},
+    provides: parent ? parent.provides : {},
+    parent,
     emit: () => {},
   };
   // 為了使用者能夠直接傳入event不用傳入整個instance
