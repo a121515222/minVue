@@ -2,9 +2,9 @@ import { isObject } from "../shared/index";
 import { ShapeFlags } from "../shared/shapeFlags";
 import { createComponentInstance, setupComponent } from "./helpers/component";
 import { Fragment, Text } from "./vnode";
-export function render(vnode, container, parentComponent) {
+export function render(vnode, container) {
   // 調用patch
-  patch(vnode, container, parentComponent);
+  patch(vnode, container, null);
 }
 function patch(vnode, container, parentComponent) {
   const { type, shapeFlag } = vnode;
