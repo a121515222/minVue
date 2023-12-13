@@ -1,8 +1,17 @@
 import { isObject } from "../shared/index";
 import { ShapeFlags } from "../shared/shapeFlags";
+import { createAppAPI } from "./createApp";
 import { createComponentInstance, setupComponent } from "./helpers/component";
 import { Fragment, Text } from "./vnode";
-export function render(vnode, container) {
+
+export function createRenderer(options){
+  const {
+    createElement: hostCreateElement,
+    patchProp: hostPatchProp,
+    insert: hostInsert
+  } = options
+
+function render(vnode, container) {
   // 調用patch
   patch(vnode, container, null);
 }
@@ -36,9 +45,14 @@ function processElement(vnode: any, container: any, parentComponent) {
 }
 
 function mountElement(vnode: any, container: any, parentComponent) {
+
+  // canvas
+  //new Element()
+
+
   // 把所創造了element存在vnode內
   // 這裡的vnode是屬於App.js 中h函式內的"div"
-  const el = (vnode.el = document.createElement(vnode.type));
+  const el = (vnode.el = hostCreateElement(vnode.type));
 
   // 收到vnode是 string or array
   const { children, shapeFlag } = vnode;
@@ -54,15 +68,15 @@ function mountElement(vnode: any, container: any, parentComponent) {
   for (const key in props) {
     const val = props[key];
 
-    // 檢查key中有沒有註冊事件
-    const isOn = (key: string) => /^on[A-Z]/.test(key);
-    if (isOn(key)) {
-      const event = key.slice(2).toLocaleLowerCase();
-      el.addEventListener(event, val);
-    }
-    el.setAttribute(key, val);
+   
+    hostPatchProp(el,key,val)
   }
-  container.append(el);
+
+  // canvas
+  //el.x
+
+  // container.append(el);
+  hostInsert(el,container)
 }
 function mountChildren(vnode, container, parentComponent) {
   vnode.children.forEach((v) => {
@@ -96,4 +110,9 @@ function processText(vnode: any, container: any) {
   const { children } = vnode;
   const textNode = (vnode.el = document.createTextNode(children));
   container.append(textNode);
+}
+
+return{
+  createApp:createAppAPI(render)
+}
 }
