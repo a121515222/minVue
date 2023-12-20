@@ -3,6 +3,7 @@ import { emit } from "../componentEmit";
 import { initProps } from "../componentProps";
 import { PublicInstanceProxyHandlers } from "../componentPublicInstance";
 import { initSlots } from "../componentSlots";
+import { proxyRefs } from "../../reactivity/ref"
 
 export function createComponentInstance(vnode: any, parent) {
   const component = {
@@ -13,6 +14,8 @@ export function createComponentInstance(vnode: any, parent) {
     slots: {},
     provides: parent ? parent.provides : {},
     parent,
+    isMounted:false,
+    subTree:{},
     emit: () => {},
   };
   // 為了使用者能夠直接傳入event不用傳入整個instance
@@ -61,7 +64,7 @@ function setupStatefulComponent(instance: any) {
 function handleSetupResult(instance, setupResult: any) {
   //to do function
   if (typeof setupResult === "object") {
-    instance.setupState = setupResult;
+    instance.setupState = proxyRefs(setupResult) ;
   }
   //保證render component是有值的
   finishComponentSetup(instance);
