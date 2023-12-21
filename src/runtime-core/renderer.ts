@@ -1,5 +1,5 @@
 import { effect } from "../reactivity/effect";
-import { isObject } from "../shared/index";
+import { isObject,EMPTY_OBJ } from "../shared/index";
 import { ShapeFlags } from "../shared/shapeFlags";
 import { createAppAPI } from "./createApp";
 import { createComponentInstance, setupComponent } from "./helpers/component";
@@ -54,10 +54,38 @@ function patchElement(n1,n2,container){
   console.log("patchElement")
   console.log("n1",n1)
   console.log("n2",n2)
-
   //對比props,
+  const oldProps = n1.props ||EMPTY_OBJ
+  const newProps = n2.props ||EMPTY_OBJ
+
+  const el = (n2.el = n1.el)
+
+  patchProps(el,oldProps,newProps)
+
+  
   //對比children
 }
+
+function patchProps(el,oldProps,newProps){
+  if(oldProps !== newProps){
+    for (const key in newProps) {
+      const prevProp = oldProps[key];
+      const nextProp = newProps[key];
+        if(prevProp !== nextProp){
+          hostPatchProp(el,key,prevProp,nextProp);
+        }
+      }
+
+    if(oldProps !== EMPTY_OBJ){
+      for (const key in oldProps) {
+        if(!(key in newProps)){
+          hostPatchProp(el,key,oldProps[key],null);
+        }
+      } 
+    }  
+  }
+  
+  }
 function mountElement(n2: any, container: any, parentComponent) {
 
   // canvas
@@ -81,7 +109,7 @@ function mountElement(n2: any, container: any, parentComponent) {
   const { props } = n2;
   for (const key in props) {
     const val = props[key];
-    hostPatchProp(el,key,val)
+    hostPatchProp(el,key,null,val)
   }
 
   // canvas
