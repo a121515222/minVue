@@ -72,18 +72,61 @@ import { ref, h } from "../../lib/guide-mini-vue.esm.js";
 //c (a b)
 //(a b)
 // i =0, el = 0, e2 = -1
-const prevChildren = [
-  h("p", { key: "C" }, "C"),
-  h("p", { key: "A" }, "A"),
-  h("p", { Key: "B" }, "B"),
-];
-const nextChildren = [h("p", { key: "A" }, "A"), h("p", { Key: "B" }, "B")];
+// const prevChildren = [
+//   h("p", { key: "C" }, "C"),
+//   h("p", { key: "A" }, "A"),
+//   h("p", { Key: "B" }, "B"),
+// ];
+// const nextChildren = [h("p", { key: "A" }, "A"), h("p", { Key: "B" }, "B")];
 
-//5.對比中見的部分
+//5.對比中間的部分
 //  1.創建新的(在老的裡面不存在，新的裡面存在)
 //  2.刪除老的(在老的裡面存在，新的裡面不存在)
 //  3.移動(節點存在於新和老的裡面，但位置變了)
 //    使用長子序列優化
+
+// a,b,(c,d),f,g
+// a,b,(e,c),f,g
+// d節點是新的是沒有，需要刪掉
+// c節點的props也發生的了變化
+
+// const prevChildren = [
+//   h("p", { key: "A" }, "A"),
+//   h("p", { Key: "B" }, "B"),
+//   h("p", { key: "C", id: "c-prev" }, "C"),
+//   h("p", { key: "D" }, "D"),
+//   h("p", { Key: "F" }, "F"),
+//   h("p", { Key: "G" }, "G"),
+// ];
+// const nextChildren = [
+//   h("p", { key: "A" }, "A"),
+//   h("p", { Key: "B" }, "B"),
+//   h("p", { Key: "E" }, "E"),
+//   h("p", { key: "C", id: "c-next" }, "C"),
+//   h("p", { Key: "F" }, "F"),
+//   h("p", { Key: "G" }, "G"),
+// ];
+
+// 5.1 老的比新的多,在新的比對完後，就可以不用比對，刪除就的節點
+
+const prevChildren = [
+  h("p", { key: "A" }, "A"),
+  h("p", { Key: "B" }, "B"),
+  h("p", { key: "C", id: "c-prev" }, "C"),
+  h("p", { key: "E" }, "E"),
+  h("p", { key: "D" }, "D"),
+  h("p", { Key: "F" }, "F"),
+  h("p", { Key: "G" }, "G"),
+];
+const nextChildren = [
+  h("p", { key: "A" }, "A"),
+  h("p", { Key: "B" }, "B"),
+  h("p", { Key: "E" }, "E"),
+  h("p", { key: "C", id: "c-next" }, "C"),
+  h("p", { Key: "F" }, "F"),
+  h("p", { Key: "G" }, "G"),
+];
+
 export default {
   name: "ArrayToArray",
   setup() {
