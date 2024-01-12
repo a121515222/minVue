@@ -9,12 +9,12 @@ import { ref, h } from "../../lib/guide-mini-vue.esm.js";
 
 // const prevChildren = [
 //   h("p", { key: "A" }, "A"),
-//   h("p", { Key: "B" }, "B"),
+//   h("p", { key: "B" }, "B"),
 //   h("p", { key: "C" }, "C"),
 // ];
 // const nextChildren = [
 //   h("p", { key: "A" }, "A"),
-//   h("p", { Key: "B" }, "B"),
+//   h("p", { key: "B" }, "B"),
 //   h("p", { key: "D" }, "D"),
 //   h("p", { key: "E" }, "E"),
 // ];
@@ -23,14 +23,14 @@ import { ref, h } from "../../lib/guide-mini-vue.esm.js";
 //d e (b c)
 // const prevChildren = [
 //   h("p", { key: "A" }, "A"),
-//   h("p", { Key: "B" }, "B"),
+//   h("p", { key: "B" }, "B"),
 //   h("p", { key: "C" }, "C"),
 // ];
 // const nextChildren = [
 //   h("p", { key: "D" }, "D"),
 //   h("p", { key: "E" }, "E"),
 //   h("p", { key: "B" }, "B"),
-//   h("p", { Key: "C" }, "C"),
+//   h("p", { key: "C" }, "C"),
 // ];
 
 //3.新的比老的長
@@ -41,7 +41,7 @@ import { ref, h } from "../../lib/guide-mini-vue.esm.js";
 // const prevChildren = [h("p", { key: "A" }, "A"), h("p", { Key: "B" }, "B")];
 // const nextChildren = [
 //   h("p", { key: "A" }, "A"),
-//   h("p", { Key: "B" }, "B"),
+//   h("p", { key: "B" }, "B"),
 //   h("p", { key: "C" }, "C"),
 // ];
 
@@ -53,7 +53,7 @@ import { ref, h } from "../../lib/guide-mini-vue.esm.js";
 // const nextChildren = [
 //   h("p", { key: "C" }, "C"),
 //   h("p", { key: "A" }, "A"),
-//   h("p", { Key: "B" }, "B"),
+//   h("p", { key: "B" }, "B"),
 // ];
 
 //4.老的比新的長
@@ -63,7 +63,7 @@ import { ref, h } from "../../lib/guide-mini-vue.esm.js";
 // (i = 2), (el = 2), (e2 = 1);
 // const prevChildren = [
 //   h("p", { key: "A" }, "A"),
-//   h("p", { Key: "B" }, "B"),
+//   h("p", { key: "B" }, "B"),
 //   h("p", { key: "C" }, "C"),
 // ];
 // const nextChildren = [h("p", { key: "B" }, "B"), h("p", { Key: "C" }, "C")];
@@ -75,7 +75,7 @@ import { ref, h } from "../../lib/guide-mini-vue.esm.js";
 // const prevChildren = [
 //   h("p", { key: "C" }, "C"),
 //   h("p", { key: "A" }, "A"),
-//   h("p", { Key: "B" }, "B"),
+//   h("p", { key: "B" }, "B"),
 // ];
 // const nextChildren = [h("p", { key: "A" }, "A"), h("p", { Key: "B" }, "B")];
 
@@ -92,19 +92,19 @@ import { ref, h } from "../../lib/guide-mini-vue.esm.js";
 
 // const prevChildren = [
 //   h("p", { key: "A" }, "A"),
-//   h("p", { Key: "B" }, "B"),
+//   h("p", { key: "B" }, "B"),
 //   h("p", { key: "C", id: "c-prev" }, "C"),
 //   h("p", { key: "D" }, "D"),
-//   h("p", { Key: "F" }, "F"),
-//   h("p", { Key: "G" }, "G"),
+//   h("p", { key: "F" }, "F"),
+//   h("p", { key: "G" }, "G"),
 // ];
 // const nextChildren = [
 //   h("p", { key: "A" }, "A"),
-//   h("p", { Key: "B" }, "B"),
-//   h("p", { Key: "E" }, "E"),
+//   h("p", { key: "B" }, "B"),
+//   h("p", { key: "E" }, "E"),
 //   h("p", { key: "C", id: "c-next" }, "C"),
-//   h("p", { Key: "F" }, "F"),
-//   h("p", { Key: "G" }, "G"),
+//   h("p", { key: "F" }, "F"),
+//   h("p", { key: "G" }, "G"),
 // ];
 
 // 5.1 老的比新的多,在新的比對完後，就可以不用比對，刪除就的節點
@@ -115,16 +115,16 @@ const prevChildren = [
   h("p", { key: "C", id: "c-prev" }, "C"),
   h("p", { key: "E" }, "E"),
   h("p", { key: "D" }, "D"),
-  h("p", { Key: "F" }, "F"),
-  h("p", { Key: "G" }, "G"),
+  h("p", { key: "F" }, "F"),
+  h("p", { key: "G" }, "G"),
 ];
 const nextChildren = [
   h("p", { key: "A" }, "A"),
-  h("p", { Key: "B" }, "B"),
-  h("p", { Key: "E" }, "E"),
+  h("p", { key: "B" }, "B"),
+  h("p", { key: "E" }, "E"),
   h("p", { key: "C", id: "c-next" }, "C"),
-  h("p", { Key: "F" }, "F"),
-  h("p", { Key: "G" }, "G"),
+  h("p", { key: "F" }, "F"),
+  h("p", { key: "G" }, "G"),
 ];
 
 export default {
