@@ -153,7 +153,10 @@ if(i > e1){
     let patched = 0;
     const keyToNewIndexMap = new Map();
     //建立一個最長遞增函數的映射表，建立一個定長的array最省資源
-    const newIndexToOldIndexMap = new Array(toBePatched)
+    const newIndexToOldIndexMap = new Array(toBePatched);
+
+    let moved = false;
+    let maxNewIndexSoFar = 0;
     //初始化newIndexToOldIndexMap
     for(let i = 0; i< patched;i++) newIndexToOldIndexMap[i] = 0
     newIndexToOldIndexMap[i]=0
@@ -191,6 +194,12 @@ if(i > e1){
         hostRemove(prevChild.el);
       } else{
 
+        if(newIndex >= maxNewIndexSoFar){
+          maxNewIndexSoFar = newIndex
+        } else {
+          moved = true
+        }
+
         newIndexToOldIndexMap[newIndex - s2] = i + 1 ;// 不讓i為0，因為i為0的話代表映射關係還沒建立，代表新的節點在
         // 老的節點裡是不存在的
 
@@ -200,10 +209,25 @@ if(i > e1){
         patched ++
       }
     }
-    const increasingNewIndexSequence = getSequence(newIndexToOldIndexMap);
-    const j = 0;//最長遞增子序列的指針
-    for(let i = 0; i< toBePatched; i++){
+    const increasingNewIndexSequence = moved? getSequence(newIndexToOldIndexMap):[] ;
+    let j = increasingNewIndexSequence.length - 1;//最長遞增子序列的指針
+    // 從已經確定的節點插入移動的節點
+    for(let i = toBePatched - 1 ; i>= 0; i--){
 
+      const nextIndex = i + s2;
+      const nextChild = c2[nextIndex]
+      const anchor = nextIndex + 1 < l2 ? c2[nextIndex + 1].el:null;
+      if(newIndexToOldIndexMap[i]===0){
+        patch(null, nextChild, container, parentComponent, anchor);
+      }
+      if(moved){
+        if(j<0 || i !== increasingNewIndexSequence[j]){
+          hostInsert(nextChild.el, container, anchor)
+        } else {
+          j--;
+        }
+      }
+      
     }
 
   }
