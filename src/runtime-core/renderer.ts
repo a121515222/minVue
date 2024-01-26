@@ -3,6 +3,7 @@ import { isObject,EMPTY_OBJ } from "../shared/index";
 import { ShapeFlags } from "../shared/shapeFlags";
 import { createAppAPI } from "./createApp";
 import { createComponentInstance, setupComponent } from "./helpers/component";
+import { shouldUpdateComponent } from "./helpers/componentUpdateUtils";
 import { Fragment, Text } from "./vnode";
 
 export function createRenderer(options){
@@ -295,43 +296,33 @@ function mountChildren(children, container, parentComponent, anchor) {
 }
 
 function processComponent(n1,n2: any, container: any, parentComponent, anchor) {
-  mountComponent(n2, container, parentComponent, anchor);
-}
+  if(!n1){
+    mountComponent(n2, container, parentComponent, anchor);
 
+  } else {
+    updateComponent(n1,n2)
+  }
+}
+function updateComponent(n1,n2){
+  const instance = (n2.component =  n1.component)
+  if(shouldUpdateComponent(n1,n2)){
+    instance.next = n2
+    instance.update();
+  } else {
+    n2.el = n1.el;
+    instance.vnode = n2
+  }
+}
 function mountComponent(initialVNode: any, container, parentComponent, anchor) {
-  const instance = createComponentInstance(initialVNode, parentComponent);
+  const instance = (initialVNode.component= createComponentInstance(initialVNode, parentComponent));
   setupComponent(instance);
   setupRenderEffect(instance, initialVNode, container, anchor);
 }
-// function setupRenderEffect(instance: any, initialVNode, container) {
 
-//   //利用effect做依賴收集
-//   effect(()=>{
-//     if(!instance.isMounted){
-//       console.log("init")
-//       // 下面兩行看不懂為甚麼render.call(proxy)
-//       const { proxy } = instance;
-//       const subTree = (instance.subTree =instance.render.call(proxy));
-
-
-//       // 在 path中
-//       // vnode 為element > mounted element
-//       patch(subTree, container, instance);
-//       //當所有element都已經mounted的時候,把subTree的元素賦值給Component的虛擬節點
-//       initialVNode.el = subTree.el;
-//       instance.isMounted = true
-//     }else{
-//       console.log("update")
-//       const { proxy } = instance;
-//       const subTree = instance.render.call(proxy);
-//       const prevSubTree=instance.subTree
-//       instance.subTree = subTree
-//   });
-// }
 function setupRenderEffect(instance: any, initialVNode, container, anchor) {
 
   // 利用 effect 做依賴收集
-  effect(() => {
+instance.update = effect(() => {
     if (!instance.isMounted) {
       // 下面兩行看不懂為甚麼 render.call(proxy)
       const { proxy } = instance;
@@ -345,6 +336,13 @@ function setupRenderEffect(instance: any, initialVNode, container, anchor) {
       initialVNode.el = subTree.el;
       instance.isMounted = true;
     } else {
+
+      // 需要一個新的vnode
+      const { next, vnode} = instance;
+      if(next){
+        next.el = vnode.el;
+        updateComponentPreRender(instance,next);
+      }
       const { proxy } = instance;
       const subTree = instance.render.call(proxy);
       const prevSubTree = instance.subTree;
@@ -367,7 +365,12 @@ return{
   createApp:createAppAPI(render)
 }
 }
+function updateComponentPreRender (instance, nextVNode){
+  instance.vnode = nextVNode;
+  instance.next = null;
+  instance.props = nextVNode.props;
 
+}
 
 function getSequence(arr: number[]): number[] {
   const p = arr.slice();

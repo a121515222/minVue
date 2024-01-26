@@ -6,6 +6,7 @@ export function createVNode(type, props?, children?) {
     type,
     props,
     children,
+    component:null,
     key:props && props.key,
     shapeFlag: getShapeFlag(type),
     // 初始化虛擬el設定為null
