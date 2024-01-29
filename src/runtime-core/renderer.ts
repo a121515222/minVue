@@ -4,6 +4,7 @@ import { ShapeFlags } from "../shared/shapeFlags";
 import { createAppAPI } from "./createApp";
 import { createComponentInstance, setupComponent } from "./helpers/component";
 import { shouldUpdateComponent } from "./helpers/componentUpdateUtils";
+import { queueJobs } from "./helpers/scheduler";
 import { Fragment, Text } from "./vnode";
 
 export function createRenderer(options){
@@ -350,7 +351,17 @@ instance.update = effect(() => {
       patch(prevSubTree,subTree, container, instance, anchor);
       // Missing closing parenthesis for the else block
     }
-  });
+  },
+    {
+
+      scheduler(){
+        console.log(" updater - scheduler");
+        queueJobs(instance.update);
+      }
+    }
+  
+  
+  );
 }
 function processFragment(n1,n2: any, container: any, parentComponent, anchor) {
   mountChildren(n2.children, container, parentComponent, anchor);
