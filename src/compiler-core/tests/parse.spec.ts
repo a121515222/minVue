@@ -6,7 +6,7 @@ describe('Parse', ()=>{
 
   describe('interpolation', ()=>{
     test('simple interpolation',()=>{
-      const ast =  baseParse("{{  message}}");
+      const ast =  baseParse("{{message}}");
       expect(ast.children[0]).toStrictEqual({
         type:NodeTypes.INTERPOLATION ,
         content:{
@@ -26,4 +26,14 @@ describe('element', ()=>{
         tag:"div",
       });
     });
+})
+
+describe("text",()=>{
+  it('simple element div',()=>{
+    const ast =  baseParse("some text");
+    expect(ast.children[0]).toStrictEqual({
+      type:NodeTypes.TEXT ,
+      content:"some text",
+    });
+  });
 })

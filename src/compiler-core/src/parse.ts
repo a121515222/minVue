@@ -23,6 +23,11 @@ function parseChildren (context) {
       node =  parseElement(context);
     }
   }
+
+  if(!node){
+    node = parseText(context)
+  }
+
   nodes.push(node);
   return nodes
 
@@ -67,10 +72,10 @@ function parseInterpolation(context){
   //取得message的長度
   const rawContentLength = closeIndex - openDelimiter.length;
   // 取得message
-  const rawContent = context.source.slice(0,rawContentLength)
+  const rawContent = parseTextData(context, rawContentLength);
   const content = rawContent.trim();
   // 繼續推進 因為{{message}}後面可能有<div>,所以要移除}}
-  advanceBy(context, rawContentLength + closeDelimiter.length);
+  advanceBy(context, closeDelimiter.length);
   console.log("context.source", context.source)
   console.log("content", content)
   
@@ -101,3 +106,23 @@ function createParserContext(content:string):any{
 }
 
 
+function parseText(context: any){
+  
+
+  const content = parseTextData(context,context.source.length);
+  return {
+    type:NodeTypes.TEXT ,
+    content,
+  }
+
+  
+}
+
+function parseTextData(context,length) {
+  // 1.獲取當前內容
+  const content = context.source.slice(0, length);
+
+  // 2.推進
+  advanceBy(context, length);
+  return content;
+}
